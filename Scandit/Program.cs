@@ -62,23 +62,30 @@ namespace ScanditCommandLine
                     {
                         // recognize bar codes in the image, the result of the barcode recognition will become 
                         // available in scanner.Session
+                        DateTime startTime = DateTime.Now;
                         frameSeq.ProcessFrame(imageDescription, bits.Scan0);
                         inputImage.UnlockBits(bits);
                         var recognizedCodes = scanner.Session.GetNewlyRecognizedCodes().ToArray();
+                        DateTime endTime = DateTime.Now;
+                        long elapsed = (long)(endTime - startTime).TotalMilliseconds;
+                        Console.WriteLine("Elased: " + elapsed);
                         if (recognizedCodes.Length > 0)
                         {
+                            Dictionary<string,object> jsonObject = new Dictionary<string, Object>();
                             ArrayList results = new ArrayList();
                             Console.WriteLine("recognized codes");
                             foreach (var code in recognizedCodes)
                             {
                                 Console.WriteLine("{0}: {1}", code.SymbologyString.ToUpper(), code.Data);
-                                Dictionary<string,string> result = new Dictionary<string,string>();
+                                Dictionary<string,Object> result = new Dictionary<string, Object>();
                                 result["barcodeText"] = code.Data;
                                 result["barcodeFormat"] = code.SymbologyString;
                                 results.Add(result);
                             }
-                            string jsonStr = JsonConvert.SerializeObject(results);
-                            string outputPath = Path.Combine(folderPath, filename + ".json");
+                            jsonObject["results"] = results;
+                            jsonObject["elapsedTime"] = elapsed;
+                            string jsonStr = JsonConvert.SerializeObject(jsonObject);
+                            string outputPath = Path.Combine(folderPath, filename + "-scandit.json");
                             File.WriteAllText(outputPath, jsonStr);
                         }
                         else
