@@ -19,7 +19,7 @@ namespace ScanditCommandLine
                 Console.WriteLine("Usage: CommandLineQrCodeScanner <path-to-image>");
                 return;
             }
-            Console.WriteLine(ScanditBarcodeScannerAppKey);
+            //Console.WriteLine(ScanditBarcodeScannerAppKey);
             // the barcode scanner requires a writeable folder for caching purposes. 
             var tempPath = System.IO.Path.GetTempPath();
             // the recognition context handles and schedules recognition tasks.
@@ -47,7 +47,7 @@ namespace ScanditCommandLine
 
                     if (bits.Stride < 0)
                     {
-                        Console.WriteLine("Bottom-up images are not supported at that moment.");
+                        //Console.WriteLine("Bottom-up images are not supported at that moment.");
                         return;
                     }
 
@@ -68,30 +68,29 @@ namespace ScanditCommandLine
                         var recognizedCodes = scanner.Session.GetNewlyRecognizedCodes().ToArray();
                         DateTime endTime = DateTime.Now;
                         long elapsed = (long)(endTime - startTime).TotalMilliseconds;
-                        Console.WriteLine("Elased: " + elapsed);
+                        //Console.WriteLine("Elased: " + elapsed);
+                        Dictionary<string, object> jsonObject = new Dictionary<string, Object>();
+                        ArrayList results = new ArrayList();
                         if (recognizedCodes.Length > 0)
                         {
-                            Dictionary<string,object> jsonObject = new Dictionary<string, Object>();
-                            ArrayList results = new ArrayList();
-                            Console.WriteLine("recognized codes");
+                            
+                            //Console.WriteLine("recognized codes");
                             foreach (var code in recognizedCodes)
                             {
-                                Console.WriteLine("{0}: {1}", code.SymbologyString.ToUpper(), code.Data);
+                                //Console.WriteLine("{0}: {1}", code.SymbologyString.ToUpper(), code.Data);
                                 Dictionary<string,Object> result = new Dictionary<string, Object>();
                                 result["barcodeText"] = code.Data;
                                 result["barcodeFormat"] = code.SymbologyString;
                                 results.Add(result);
                             }
-                            jsonObject["results"] = results;
-                            jsonObject["elapsedTime"] = elapsed;
-                            string jsonStr = JsonConvert.SerializeObject(jsonObject);
-                            string outputPath = Path.Combine(folderPath, filename + "-scandit.json");
-                            File.WriteAllText(outputPath, jsonStr);
+                            
                         }
-                        else
-                        {
-                            Console.WriteLine("no codes recognized");
-                        }
+                        jsonObject["results"] = results;
+                        jsonObject["elapsedTime"] = elapsed;
+                        string jsonStr = JsonConvert.SerializeObject(jsonObject);
+                        string outputPath = Path.Combine(folderPath, filename + "-scandit.json");
+                        //File.WriteAllText(outputPath, jsonStr);
+                        Console.WriteLine(jsonStr);
                     }
 
                 }
