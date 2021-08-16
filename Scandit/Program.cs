@@ -33,10 +33,35 @@ namespace ScanditCommandLine
             // the recognition context handles and schedules recognition tasks.
             var context = new RecognitionContext(ScanditBarcodeScannerAppKey, tempPath);
             var settings = new BarcodeScannerSettings();
-            // enable scanning of Ean13 + UPC A codes.
+            // enable scanning of all codes.
+            //settings.Symbologies[BarcodeSymbology.Ean8].Enabled = true;
             settings.Symbologies[BarcodeSymbology.Ean13].Enabled = true;
             settings.Symbologies[BarcodeSymbology.Upca].Enabled = true;
-            settings.Symbologies[BarcodeSymbology.Qr].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Upce].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Qr].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Aztec].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Codabar].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Code11].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Code25].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Code32].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Code39].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Code93].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.DataMatrix].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.DotCode].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.FiveDigitAddOn].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Gs1Databar].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Gs1DatabarExpanded].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Gs1DatabarLimited].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Interleaved2Of5].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Kix].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Lapa4sc].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.MaxiCode].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.MicroPdf417].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.MicroQr].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.MsiPlessey].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Pdf417].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.Rm4scc].Enabled = true;
+            //settings.Symbologies[BarcodeSymbology.TwoDigitAddOn].Enabled = true;
             settings.MaxNumberOfCodesPerFrame = 999;
             var scanner = new BarcodeScanner(context, settings);
             if (serverMode)
@@ -121,6 +146,14 @@ namespace ScanditCommandLine
                         Dictionary<string, Object> result = new Dictionary<string, Object>();
                         result["barcodeText"] = code.Data;
                         result["barcodeFormat"] = code.SymbologyString;
+                        result["x1"] = code.Location.TopLeft.X;
+                        result["y1"] = code.Location.TopLeft.Y;
+                        result["x2"] = code.Location.TopRight.X;
+                        result["y2"] = code.Location.TopRight.Y;
+                        result["x3"] = code.Location.BottomRight.X;
+                        result["y3"] = code.Location.BottomRight.Y;
+                        result["x4"] = code.Location.BottomLeft.X;
+                        result["y4"] = code.Location.BottomLeft.Y;
                         results.Add(result);
                     }
 
