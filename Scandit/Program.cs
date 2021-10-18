@@ -34,19 +34,25 @@ namespace ScanditCommandLine
             var context = new RecognitionContext(ScanditBarcodeScannerAppKey, tempPath);
             var settings = new BarcodeScannerSettings();
             // enable scanning of all codes.
-            //settings.Symbologies[BarcodeSymbology.Ean8].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Ean8].Enabled = true;
             settings.Symbologies[BarcodeSymbology.Ean13].Enabled = true;
             settings.Symbologies[BarcodeSymbology.Upca].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Upce].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Qr].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Upce].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Qr].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Pdf417].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.DataMatrix].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code128].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code11].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code25].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code32].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code39].Enabled = true;
+            settings.Symbologies[BarcodeSymbology.Code93].Enabled = true;
+
             //settings.Symbologies[BarcodeSymbology.Aztec].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.Codabar].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Code11].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Code25].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Code32].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Code39].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Code93].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.DataMatrix].Enabled = true;
+
+
+
             //settings.Symbologies[BarcodeSymbology.DotCode].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.FiveDigitAddOn].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.Gs1Databar].Enabled = true;
@@ -59,7 +65,6 @@ namespace ScanditCommandLine
             //settings.Symbologies[BarcodeSymbology.MicroPdf417].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.MicroQr].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.MsiPlessey].Enabled = true;
-            //settings.Symbologies[BarcodeSymbology.Pdf417].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.Rm4scc].Enabled = true;
             //settings.Symbologies[BarcodeSymbology.TwoDigitAddOn].Enabled = true;
             settings.MaxNumberOfCodesPerFrame = 999;
@@ -101,6 +106,7 @@ namespace ScanditCommandLine
 
         private static string decode(BarcodeScanner scanner, RecognitionContext context, string path)
         {
+            DateTime startTime = DateTime.Now;
             string filename = Path.GetFileName(path);
             string folderPath = Path.GetDirectoryName(path);
             var inputImage = new Bitmap(path);
@@ -127,7 +133,6 @@ namespace ScanditCommandLine
             {
                 // recognize bar codes in the image, the result of the barcode recognition will become 
                 // available in scanner.Session
-                DateTime startTime = DateTime.Now;
                 frameSeq.ProcessFrame(imageDescription, bits.Scan0);
                 inputImage.UnlockBits(bits);
                 var recognizedCodes = scanner.Session.GetNewlyRecognizedCodes().ToArray();
